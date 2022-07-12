@@ -7,6 +7,7 @@ def get_computer_choice():
 def get_user_choice():
     # Get user input 
     user_choice = input("Enter Rock, Paper or Scissors: ")
+    print("\n")
     return user_choice
 
 def get_winner(choice_dict):
@@ -14,20 +15,25 @@ def get_winner(choice_dict):
     if "Rock" and "Paper" in choice_dict.values():
         winner = list(choice_dict.keys())[list(choice_dict.values()).index("Paper")]
     elif "Rock" and "Scissors" in choice_dict.values(): 
-        winner = list(choice_dict.keys())[list(choice_dict.values()).index("Rock")]   
+        winner = list(choice_dict.keys())[list(choice_dict.values()).index("Rock")] 
     elif "Paper" and "Scissors" in choice_dict.values(): 
         winner = list(choice_dict.keys())[list(choice_dict.values()).index("Scissors")]
     elif choice_dict["User"]==choice_dict["Computer"]:
         print("Draw!")
+        quit()
     else:
         print("Error please check letter case and try again")
         quit()
     return winner
 
+def play():
+    computer_choice = "Paper"   #get_computer_choice()
+    user_choice =   "Scissors"    # get_user_choice()
+    choice_dict = {"User": user_choice, "Computer": computer_choice}
+    winner = get_winner(choice_dict)
+    print("The computer chose: ", computer_choice,"\n The user chose: ",user_choice)
+    print("\n")
+    print("The winner is: ", winner,"!")
+    return
 
-computer_choice = get_computer_choice()
-user_choice =  get_user_choice()
-choice_dict = {"User": user_choice, "Computer": computer_choice}
-winner = get_winner(choice_dict)
-print("The computer chose: ", computer_choice,"\n The user chose: ",user_choice)
-print("The winner is ", winner,"!")
+play()
