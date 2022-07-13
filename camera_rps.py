@@ -6,14 +6,23 @@ def get_computer_choice():
 
 def get_user_choice():
     # Get user input 
-    print("Show Rock, Paper or Scissors to the camera: ")
+    with open("labels.txt", "r") as f:
+        huge_list = f.read().split()
+        label_key = huge_list[1::2]
+        label_value = huge_list[::2]
+        label_value = list(map(int, label_value))
+        labels = dict(zip(label_key, label_value))
+
     import cv2
     from keras.models import load_model
     import numpy as np
     model = load_model('keras_model.h5')
     cap = cv2.VideoCapture(0)
     data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
- 
+
+
+
+    print("Show Rock, Paper or Scissors to the camera: ")
 
 
     ret, frame = cap.read()
@@ -30,8 +39,8 @@ def get_user_choice():
     cap.release()
     # Destroy all the windows
     cv2.destroyAllWindows()
-    user_choice = max(prediction)
-    print(user_choice)
+    prediction_indx = prediction.argmax()
+    user_choice = list(labels.keys())[list(labels.values()).index(prediction_indx)]
     return user_choice
 
 def get_winner(choice_dict):
@@ -43,8 +52,8 @@ def get_winner(choice_dict):
     elif "Paper" in choice_dict.values() and "Scissors" in choice_dict.values(): 
         winner = list(choice_dict.keys())[list(choice_dict.values()).index("Scissors")]
     elif choice_dict["User"]==choice_dict["Computer"]:
+        winner = "Draw!"
         print("Draw!")
-        quit()
     else:
         print("Error please check letter case and try again")
         quit()
