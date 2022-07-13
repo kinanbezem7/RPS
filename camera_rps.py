@@ -1,3 +1,23 @@
+from contextlib import contextmanager
+import sys, os
+import math
+
+@contextmanager
+def suppress_stdout():
+    with open(os.devnull, "w") as devnull:
+        old_stdout = sys.stdout
+        sys.stdout = devnull
+        try:  
+            yield
+        finally:
+            sys.stdout = old_stdout
+
+
+
+
+
+
+
 import random
 def get_computer_choice():
     # Pick randomly between Rock, Paper and Scissors
@@ -16,31 +36,42 @@ def get_user_choice():
     import cv2
     from keras.models import load_model
     import numpy as np
+    import time
     model = load_model('keras_model.h5')
     cap = cv2.VideoCapture(0)
     data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
-
+    t_end = 0
 
 
     print("Show Rock, Paper or Scissors to the camera: ")
+    t_start = time.time()
+    while t_end-t_start < 5:
+    
+        with suppress_stdout():
 
+            ret, frame = cap.read()
+            resized_frame = cv2.resize(frame, (224, 224), interpolation = cv2.INTER_AREA)
+            image_np = np.array(resized_frame)
+            normalized_image = (image_np.astype(np.float32) / 127.0) - 1 # Normalize the image
+            data[0] = normalized_image
+            prediction = model.predict(data)
+            cv2.imshow('frame', frame)
+        
+        prediction_indx = prediction.argmax()
+        user_choice = list(labels.keys())[list(labels.values()).index(prediction_indx)]
 
-    ret, frame = cap.read()
-    resized_frame = cv2.resize(frame, (224, 224), interpolation = cv2.INTER_AREA)
-    image_np = np.array(resized_frame)
-    normalized_image = (image_np.astype(np.float32) / 127.0) - 1 # Normalize the image
-    data[0] = normalized_image
-    prediction = model.predict(data)
-    cv2.imshow('frame', frame)
-
-
+        print(user_choice)
+        t_end = time.time()
+        t_countdown = t_end-t_start
+        print(math.floor(6-t_countdown))
+        cv2.waitKey(1)
+            
             
     # After the loop release the cap object
     cap.release()
     # Destroy all the windows
     cv2.destroyAllWindows()
-    prediction_indx = prediction.argmax()
-    user_choice = list(labels.keys())[list(labels.values()).index(prediction_indx)]
+
     return user_choice
 
 def get_winner(choice_dict):
@@ -53,7 +84,6 @@ def get_winner(choice_dict):
         winner = list(choice_dict.keys())[list(choice_dict.values()).index("Scissors")]
     elif choice_dict["User"]==choice_dict["Computer"]:
         winner = "Draw!"
-        print("Draw!")
     else:
         print("Error please check letter case and try again")
         quit()
