@@ -85,8 +85,9 @@ def get_winner(choice_dict):
     elif choice_dict["User"]==choice_dict["Computer"]:
         winner = "Draw!"
     else:
-        print("Error please check letter case and try again")
-        quit()
+        print("Error no choice detected")
+        winner = "Noone!"
+        #quit()
     return winner
 
 
@@ -99,9 +100,21 @@ def play():
     print("The computer chose: ", computer_choice,"\n The user chose: ",user_choice)
     print("\n")
     print("The winner is: ", winner,"!")
-    return
+    return winner
 
 
+computer_wins = 0
+user_wins = 0
 
+while computer_wins < 3 and user_wins < 3:
+    winner = play()
+    if winner == "Computer":
+        computer_wins += 1
+    elif winner == "User":
+        user_wins += 1
+    else:
+        print("null round")
 
-play()
+    print("Computer: ", computer_wins, "User: ", user_wins)
+    
+
