@@ -20,7 +20,7 @@ def get_winner(choice_dict):
         winner = list(choice_dict.keys())[list(choice_dict.values()).index("Scissors")]
     elif choice_dict["User"]==choice_dict["Computer"]:
         print("Draw!")
-        quit()
+        exit()
     else:
         print("Error please check letter case and try again")
         quit()

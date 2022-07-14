@@ -1,6 +1,10 @@
 from contextlib import contextmanager
 import sys, os
 import math
+import cv2
+from keras.models import load_model
+import numpy as np
+import time
 
 @contextmanager
 def suppress_stdout():
@@ -33,10 +37,7 @@ def get_user_choice():
         label_value = list(map(int, label_value))
         labels = dict(zip(label_key, label_value))
 
-    import cv2
-    from keras.models import load_model
-    import numpy as np
-    import time
+
     model = load_model('keras_model.h5')
     cap = cv2.VideoCapture(0)
     data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
@@ -101,6 +102,7 @@ def play():
     print("\n")
     print("The winner is: ", winner,"!")
     return winner
+
 
 
 computer_wins = 0
