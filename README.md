@@ -19,3 +19,7 @@ Defined get_computer_choice function to generate a random selection of Rock, Pap
 Defined get_user_choice function to input from user 
 Defined get_winner function to decide winner
 Defined Play function to play the game and output the result
+The game plays until either the computer or user wins 3 rounds. 
+
+The game could be improved by interaction and output through the camera screen instead of through the terminal. 
+The ability to restart the game without rerunning the file would also be useful. 
